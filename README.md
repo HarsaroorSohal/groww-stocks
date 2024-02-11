@@ -1,3 +1,9 @@
+## Notes
+
+1. [https://www.alphavantage.co/](https://www.alphavantage.co/) has a rate limit of 25 request per API key. Hence I've added some mock data to showcase the UI once the rate limit is hit.
+2. Used random icons/avatars.
+3. Top 20 gainers and losers API does not have pagination for fetching more data, hence the Load more button/feature can not be implemented.
+
 ## Getting Started
 
 First, run the development server:
