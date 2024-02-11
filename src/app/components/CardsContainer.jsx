@@ -1,6 +1,6 @@
 import Card from "../components/Card";
 
-const CardsContainer = ({ cardsData }) => {
+const CardsContainer = async ({ cardsData }) => {
   if (!cardsData) return;
   return (
     <div className="flex flex-row gap-4 justify-center flex-wrap">

@@ -4,9 +4,8 @@ import Link from "next/link";
 import AppStoreInstance from "../lib/store";
 
 const logoArray = ["meta", "apple", "google", "groww", "morty"];
+
 export default function CardComponent({ ticker }) {
-  // if (ticker.ticker.at(-1) === "+")
-  //   ticker.ticker.splice(ticker.ticker?.length - 1, 1);
   const isGainer = ticker.change_percentage[0] !== "-";
   return (
     <Link

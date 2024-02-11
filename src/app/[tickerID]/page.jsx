@@ -4,6 +4,7 @@ import { TrendingDownIcon, TrendingUpIcon } from "../components/Card";
 import AppStoreInstance from "../lib/store";
 import Chart from "../components/Chart";
 import { Progress } from "../components/ui/progress";
+import { DUMMY_TICKER, DUMMY_TICKER_DETAILS } from "../lib/data";
 
 const calculatePercentage = (min, current, max) => {
   let range = max - min;
@@ -12,22 +13,25 @@ const calculatePercentage = (min, current, max) => {
 };
 
 const Page = async ({ params }) => {
-  const tickerID = params.tickerID;
-  console.log(tickerID);
+  /**
+   * Decoding to ensure that the symbols are read properly.
+   */
+  const tickerID = decodeURIComponent(params.tickerID);
   /* If routing from the home page, store will have the _currentTicker data
     Otherwise if directly add the route, we find it in the entire list of gainers and losers.*/
-  const currentTicker =
+  const tickerData = AppStoreInstance._topGainersLosers;
+  let currentTicker =
     AppStoreInstance?._currentTicker ??
-    (AppStoreInstance?._topGainersLosers?.top_gainers.find(
-      (t) => t.ticker === tickerID
-    ) ||
-      AppStoreInstance?._topGainersLosers?.top_losers.find(
-        (t) => t.ticker === tickerID
-      ));
+    (tickerData.top_gainers.find((t) => t.ticker === tickerID) ||
+      tickerData?.top_losers.find((t) => t.ticker === tickerID));
   const isGainer = currentTicker?.change_percentage[0] !== "-";
 
-  const data = await AppStoreInstance.fetchTickerDetails(tickerID);
-  if (!data || !currentTicker) return;
+  let data = await AppStoreInstance.fetchTickerDetails(tickerID);
+  /** Adding fallback in case API fails to show case UI*/
+  if (!data || !currentTicker) {
+    data = DUMMY_TICKER_DETAILS;
+    currentTicker = DUMMY_TICKER;
+  }
   return (
     <div className="m-12 p-4 flex flex-col gap-8">
       <div className="flex flex-row justify-between">

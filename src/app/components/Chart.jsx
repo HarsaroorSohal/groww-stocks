@@ -9,7 +9,6 @@ const getChartStockData = (stockData, timePeriod) => {
   const data = [];
   const stockValues = [];
   const timeSeries = TIME_PERIOD_MAPPING[timePeriod];
-  console.log("log: time series", timeSeries);
   for (const key in stockData[timeSeries]) {
     const stockValue = stockData[timeSeries][key]["1. open"];
     data.push({ x: key, y: stockValue });

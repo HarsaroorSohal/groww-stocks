@@ -5,15 +5,27 @@ import {
   fetchTimeSeriesData,
   fetchSearchResults,
 } from "./service";
+import {
+  DUMMY_TICKER,
+  DUMMY_TICKER_DETAILS,
+  DUMMY_TIME_SERIES_DATA,
+  DUMMY_TOP_GAINERS_LOSERS_DATA,
+} from "./data";
+import { configure } from "mobx";
+
+/** Mobx store for handling state and data fetching */
 class AppStore {
-  _tickerData = [];
-  _topGainersLosers = [];
-  _currentTicker;
+  _tickerData = DUMMY_TICKER_DETAILS;
+  _topGainersLosers = DUMMY_TOP_GAINERS_LOSERS_DATA;
+  _currentTicker = DUMMY_TICKER;
   _selectedSection = 1;
-  _timeSeriesData = [];
+  _timeSeriesData = DUMMY_TIME_SERIES_DATA;
   _isDarkMode = false;
 
   constructor() {
+    configure({
+      enforceActions: "never", // Disable strict actions
+    });
     makeAutoObservable(this, {
       _tickerData: observable,
       _topGainersLosers: observable,
@@ -26,9 +38,7 @@ class AppStore {
 
   async fetchData() {
     const topGainersLosers = await fetchTopGainersLosers();
-    // const timeSeriesData = await fetchTimeSeriesData();
     this._topGainersLosers = topGainersLosers;
-    // this._timeSeriesData = timeSeriesData;
   }
 
   setSelectedSection(sectionID) {
@@ -43,7 +53,7 @@ class AppStore {
 
   async fetchSearchResults(value) {
     const searchResults = await fetchSearchResults(value);
-    const convertedSearchResults = searchResults.bestMatches.map((result) => {
+    const convertedSearchResults = searchResults?.bestMatches.map((result) => {
       return { symbol: result["1. symbol"], name: result["2. name"] };
     });
 
@@ -51,9 +61,7 @@ class AppStore {
   }
 
   async fetchTimeSeriesData(timePeriod, symbol) {
-    console.log("log: in store", timePeriod, symbol);
     const timeSeriesData = await fetchTimeSeriesData(timePeriod, symbol);
-    console.log("log: in store", timeSeriesData);
     return timeSeriesData;
   }
 

@@ -1,8 +1,8 @@
 "use client";
 import { Switch } from "../components/ui/switch";
-import AppStoreInstance from "../lib/store";
 import { observer } from "mobx-react";
 
+/** WIP: Dark mode switch */
 const DarkModeSwitch = () => {
   return (
     <div className="flex items-center space-x-2">
