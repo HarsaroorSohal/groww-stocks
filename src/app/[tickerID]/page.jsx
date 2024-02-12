@@ -1,3 +1,4 @@
+"use client";
 import { AvatarImage, Avatar } from "../components/ui/avatar";
 import { Badge } from "../components/ui/badge";
 import AppStoreInstance from "../lib/store";
@@ -5,6 +6,9 @@ import Chart from "../components/Chart";
 import { Progress } from "../components/ui/progress";
 import { DUMMY_TICKER, DUMMY_TICKER_DETAILS } from "../lib/data";
 import { logoArray, TrendingDownIcon, TrendingUpIcon } from "../lib/constants";
+import { useEffect, useState } from "react";
+import Loading from "./loading";
+import { observer } from "mobx-react";
 
 const dataArray = [
   { key: "MarketCapitalization", value: "Market Cap" },
@@ -20,26 +24,38 @@ const calculatePercentage = (min, current, max) => {
   return Math.floor(position * 100);
 };
 
-const Page = async ({ params }) => {
+const Page = ({ params }) => {
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   /**
    * Decoding to ensure that the symbols are read properly.
    */
   const tickerID = decodeURIComponent(params.tickerID);
+  const fetchData = async () => {
+    setIsLoading(true);
+    const data = await AppStoreInstance.fetchTickerDetails(tickerID);
+    setData(data);
+    setIsLoading(false);
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   /* If routing from the home page, store will have the _currentTicker data
     Otherwise if directly add the route, we find it in the entire list of gainers and losers.*/
-  const tickerData = AppStoreInstance._topGainersLosers;
+  const topGainersLosers = AppStoreInstance._topGainersLosers;
   let currentTicker =
     AppStoreInstance?._currentTicker ??
-    (tickerData.top_gainers.find((t) => t.ticker === tickerID) ||
-      tickerData?.top_losers.find((t) => t.ticker === tickerID));
+    (topGainersLosers.top_gainers.find((t) => t.ticker === tickerID) ||
+      topGainersLosers?.top_losers.find((t) => t.ticker === tickerID));
   const isGainer = currentTicker?.change_percentage[0] !== "-";
 
-  let data = await AppStoreInstance.fetchTickerDetails(tickerID);
   /** Adding fallback in case API fails to show case UI*/
   if (!data || data?.Information) {
-    data = DUMMY_TICKER_DETAILS;
+    setData(DUMMY_TICKER_DETAILS);
   }
   if (!currentTicker) currentTicker = DUMMY_TICKER;
+  if (isLoading) return <Loading />;
   return (
     <div className="m-12 p-4 flex flex-col gap-8">
       <div className="flex flex-row justify-between">
@@ -143,4 +159,4 @@ const Page = async ({ params }) => {
   );
 };
 
-export default Page;
+export default observer(Page);
