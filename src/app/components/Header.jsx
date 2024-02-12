@@ -2,7 +2,6 @@
 import Search from "./SearchBar";
 import Image from "next/image";
 import Link from "next/link";
-import DarkModeSwitch from "../components/DarkModeSwitch";
 
 export default function Header() {
   return (

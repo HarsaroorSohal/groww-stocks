@@ -1,4 +1,3 @@
-"use client";
 import { NAVBAR_SECTIONS } from "../lib/constants";
 import { Tabs, TabsList, TabsTrigger } from "../components/ui/tabs";
 import AppStoreInstance from "../lib/store";

@@ -2,8 +2,7 @@ import { AvatarImage, Avatar } from "../components/ui/avatar";
 import { CardContent, Card } from "../components/ui/card";
 import Link from "next/link";
 import AppStoreInstance from "../lib/store";
-
-const logoArray = ["meta", "apple", "google", "groww", "morty"];
+import { logoArray, TrendingDownIcon, TrendingUpIcon } from "../lib/constants";
 
 export default function CardComponent({ ticker }) {
   const isGainer = ticker.change_percentage[0] !== "-";
@@ -23,7 +22,7 @@ export default function CardComponent({ ticker }) {
               <div>
                 <Avatar className=" my-2">
                   <AvatarImage
-                    alt="Alphabet Inc."
+                    alt="Ticker img"
                     src={`/${
                       logoArray[Math.floor(Math.random() * logoArray.length)]
                     }.png`}
@@ -56,45 +55,5 @@ export default function CardComponent({ ticker }) {
         </Card>
       </div>
     </Link>
-  );
-}
-
-export function TrendingDownIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <polyline points="22 17 13.5 8.5 8.5 13.5 2 7" />
-      <polyline points="16 17 22 17 22 11" />
-    </svg>
-  );
-}
-
-export function TrendingUpIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
-      <polyline points="16 7 22 7 22 13" />
-    </svg>
   );
 }

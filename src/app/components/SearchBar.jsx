@@ -39,6 +39,9 @@ export default function Search({ placeholder }) {
                   <Link
                     className="flex justify-between p-4"
                     href={`/${result.symbol}`}
+                    onClick={() => {
+                      setSearchResults([]);
+                    }}
                   >
                     <span className="font-medium mr-[24px]">
                       {result.symbol}

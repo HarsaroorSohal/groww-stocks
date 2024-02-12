@@ -14,7 +14,7 @@ const getChartStockData = (stockData, timePeriod) => {
     data.push({ x: key, y: stockValue });
     stockValues.push(Number(stockValue));
   }
-  return { data: data.slice(0, 20), stockValues: stockValues.slice(0, 20) };
+  return { data: data.slice(0, 10), stockValues: stockValues.slice(0, 10) };
 };
 
 export default function Chart({ tickerID }) {
@@ -89,7 +89,7 @@ function TimeseriesChart({ chartStockData }) {
           tickSize: 0,
           tickPadding: 16,
           format: "%d",
-          tickValues: "every 1 day",
+          tickValues: "every 2 day",
         }}
         axisLeft={{
           tickSize: 0,
