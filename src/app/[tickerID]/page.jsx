@@ -36,10 +36,10 @@ const Page = async ({ params }) => {
 
   let data = await AppStoreInstance.fetchTickerDetails(tickerID);
   /** Adding fallback in case API fails to show case UI*/
-  if (!data || !currentTicker) {
+  if (!data || data?.Information) {
     data = DUMMY_TICKER_DETAILS;
-    currentTicker = DUMMY_TICKER;
   }
+  if (!currentTicker) currentTicker = DUMMY_TICKER;
   return (
     <div className="m-12 p-4 flex flex-col gap-8">
       <div className="flex flex-row justify-between">
@@ -83,7 +83,12 @@ const Page = async ({ params }) => {
       <div className="rounded-[8px] border p-4">
         <h3 className="text-lg font-semibold">About {data.Symbol}</h3>
         <hr className="my-4" />
-        <p className="text-sm"> {data.Description} </p>
+        <p className="text-sm">
+          {" "}
+          {data.Description === "None"
+            ? DUMMY_TICKER_DETAILS["Description"]
+            : data.Description}{" "}
+        </p>
         <div className="flex flex-row gap-6">
           <Badge className="my-4 p-2 w-fit-content h-fit-content text-center flex justify-center">
             Industry : {data.Industry}
@@ -119,14 +124,17 @@ const Page = async ({ params }) => {
       </div>
       <div className="flex sm:flex-row flex-col justify-between items-center gap-2">
         {dataArray.map((d) => {
-          if (!d || d.value === "None") return null;
           return (
             <div
               key={d.key}
               className="flex flex-col justify-center items-center"
             >
               <div className="text-gray-500">{d.value}</div>
-              <div className="font-bold">${data[d.key]}</div>
+              <div className="font-bold">
+                {data[d.key] === "None"
+                  ? DUMMY_TICKER_DETAILS[d.key]
+                  : data[d.key]}
+              </div>
             </div>
           );
         })}
